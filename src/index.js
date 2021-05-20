@@ -1,13 +1,11 @@
 import { debounce } from 'lodash';
-import { error, Stack } from '@pnotify/core';
+import { error } from '@pnotify/core';
 import '@pnotify/core/dist/BrightTheme.css';
 
-// import { defaults } from '@pnotify/core';
 import './styles.css';
 import countryCardTpl from './countryCardTpl.hbs';
 import countryListTpl from './countryListTpl.hbs';
 import fetchCountry from './fetchCountries';
-// import getRefs from './get-refs';
 
 const inputEl = document.querySelector('input');
 const cardContainer = document.querySelector('.card-container');
@@ -16,24 +14,22 @@ inputEl.addEventListener('input', debounce(onInput, 500));
 
 function onInput(e) {
   //   const inputText = inputEl.value;
+  resetPage();
   const searchQuery = e.target.value;
   fetchCountry(searchQuery)
     .then(countries => {
-      resetPage();
       if (countries.length > 10) {
         error({
           text: 'Too many matches found. Please enter a more specific query!',
           mode: 'light',
-          closer: false,
+          closer: true,
           sticker: false,
-          hide: false,
-          stack: new Stack({
-            dir1: 'right',
-          }),
+          hide: true,
+          delay: 2000,
         });
         return;
       }
-      if (countries.length < 10 && countries.length > 1) {
+      if (countries.length <= 10 && countries.length > 1) {
         renderCountriesList(countries);
         return;
       }
@@ -56,24 +52,16 @@ function renderCountriesList(countries) {
 }
 
 function resetPage() {
-  //   error.close();
   cardContainer.innerHTML = '';
 }
 
-function onFetchError(error) {
-  //   console.log(`error`);
-  //   alert(`error`);
+function onFetchError(err) {
   error({
-    text: 'error',
+    text: `${err}`,
     mode: 'dark',
-    closer: false,
+    closer: true,
     sticker: false,
-    hide: false,
-    stack: new Stack({
-      dir1: 'right',
-    }),
+    hide: true,
+    delay: 2000,
   });
 }
-
-// 1. не отлавливает ошибку
-// 2. не убирается нотификашка

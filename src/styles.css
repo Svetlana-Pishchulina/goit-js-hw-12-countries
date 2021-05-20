@@ -33,8 +33,6 @@ input {
 }
 
 .country-name {
-  /* margin-left: auto;
-  margin-right: auto; */
   text-align: center;
   font-size: 70px;
 }
@@ -47,4 +45,7 @@ input {
 
 .h3 {
   margin-right: 10px;
+}
+.countries-list {
+  font-size: 30px;
 }
